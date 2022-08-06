@@ -38,8 +38,9 @@ def main(csv_filename):
                 pass
             if isinstance(vals[i], float):
                 vals[i] = int(round(vals[i], 0))
-                # convert the value to a string
-                vals[i] = str(vals[i])
+                # convert the value to a string with comma separators
+                vals[i] = f"{vals[i]:,}"
+
 
         # make folder './output' if it doesn't exist
         if not os.path.exists('./output'):
@@ -73,6 +74,11 @@ def format_as_markdown(header_row, vals):
     # remove header and value anywhere where value is empty
     usage_headers = [x for i, x in enumerate(usage_headers) if usage_values[i] != '']
     usage_values = [x for i, x in enumerate(usage_values) if usage_values[i] != '']
+
+    # remove header and value if header is MEM USAGE
+    mem_usage_idx = header_row.index('MEM USAGE')
+    usage_headers.remove('MEM USAGE')
+    usage_values.remove(vals[mem_usage_idx])
 
     # construct two markdown tables
     tt_headers = ''
